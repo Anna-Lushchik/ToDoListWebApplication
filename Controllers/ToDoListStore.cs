@@ -21,6 +21,17 @@ namespace ChecklistWebApplication.Controllers
             return ToDoList[id];
         }
 
+        public static List<ToDoListModel> AddToDoList(List<ToDoListModel> model)
+        {
+            foreach (ToDoListModel m in model)
+            {
+                int newItemId = (ToDoList.Count == 0) ? 1 : ToDoList.Keys.Max() + 1;
+                ToDoList.Add(newItemId, new ToDoListModel { Text = m.Text, Id = newItemId, Priority = m.Priority });
+            }
+
+            return model;
+        }
+
         public static ToDoListModel AddToDoListItem(ToDoListModel model)
         {
             int newItemId = ToDoList.Keys.Max() + 1;
@@ -37,6 +48,10 @@ namespace ChecklistWebApplication.Controllers
             model.Priority = newModel.Priority;
 
             return model;
+        }
+        public static void DeleteToDoList()
+        {
+            ToDoList.Clear();
         }
 
         public static void DeleteToDoListItem(int id)

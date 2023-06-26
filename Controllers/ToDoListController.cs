@@ -21,7 +21,13 @@ namespace ToDoListWebApplication.Controllers
         }
 
         [HttpPost, Route("api/[controller]")]
-        public ToDoListModel Post([FromBody] ToDoListModel model)
+        public List<ToDoListModel> Post([FromBody] List<ToDoListModel> model)
+        {
+            return ToDoListStore.AddToDoList(model);
+        }
+
+        [HttpPost, Route("api/[controller]/{id}")]
+        public ToDoListModel PostItem([FromBody] ToDoListModel model, int id)
         {
             return ToDoListStore.AddToDoListItem(model);
         }
@@ -32,8 +38,14 @@ namespace ToDoListWebApplication.Controllers
             return ToDoListStore.UpdateToDoListItem(model, id);
         }
 
+        [HttpDelete, Route("api/[controller]")]
+        public void Delete()
+        {
+            ToDoListStore.DeleteToDoList();
+        }
+
         [HttpDelete, Route("api/[controller]/{id}")]
-        public void Delete(int id)
+        public void DeleteItem(int id)
         {
             ToDoListStore.DeleteToDoListItem(id);
         }

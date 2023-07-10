@@ -18,7 +18,14 @@ namespace ChecklistWebApplication.Controllers
 
         public static ToDoListModel GetToDoListItem(int id)
         {
-            return ToDoList[id];
+            if (ToDoList.ContainsKey(id)) 
+            { 
+                return ToDoList[id];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static List<ToDoListModel> AddToDoList(List<ToDoListModel> model)
@@ -43,20 +50,28 @@ namespace ChecklistWebApplication.Controllers
 
         public static ToDoListModel UpdateToDoListItem(ToDoListModel newModel, int id)
         {
-            var model = GetToDoListItem(id);
-            model.Text = newModel.Text;
-            model.Priority = newModel.Priority;
+            if (ToDoList.ContainsKey(id))
+            {
+                var model = GetToDoListItem(id);
+                model.Text = newModel.Text;
+                model.Priority = newModel.Priority;
 
-            return model;
+                return model;
+            }
+            else
+            {
+                return null;
+            }
         }
+
         public static void DeleteToDoList()
         {
             ToDoList.Clear();
         }
 
-        public static void DeleteToDoListItem(int id)
+        public static bool DeleteToDoListItem(int id)
         {
-            ToDoList.Remove(id);
+            return ToDoList.Remove(id);
         }
     }
 }

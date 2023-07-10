@@ -9,45 +9,80 @@ namespace ToDoListWebApplication.Controllers
     public class ToDoListController : ControllerBase
     {
         [HttpGet, Route("api/[controller]")]
-        public List<ToDoListModel> Get()
+        public ActionResult<List<ToDoListModel>> Get()
         {
-            return ToDoListStore.GetAllToDoList();
+            var toDoList = ToDoListStore.GetAllToDoList();
+
+            if (toDoList.Any())
+            {
+                return Ok(toDoList);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [HttpGet, Route("api/[controller]/{id}")]
-        public ToDoListModel GetItem(int id)
+        public ActionResult<ToDoListModel> GetItem(int id)
         {
-            return ToDoListStore.GetToDoListItem(id);
+            var toDoList = ToDoListStore.GetToDoListItem(id);
+
+            if (toDoList != null)
+            {
+                return Ok(toDoList);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost, Route("api/[controller]")]
-        public List<ToDoListModel> Post([FromBody] List<ToDoListModel> model)
+        public ActionResult<List<ToDoListModel>> Post([FromBody] List<ToDoListModel> model)
         {
-            return ToDoListStore.AddToDoList(model);
+            return Created("", ToDoListStore.AddToDoList(model));
         }
 
         [HttpPost, Route("api/[controller]/{id}")]
-        public ToDoListModel PostItem([FromBody] ToDoListModel model, int id)
+        public ActionResult<ToDoListModel> PostItem([FromBody] ToDoListModel model)
         {
-            return ToDoListStore.AddToDoListItem(model);
+            return Created("", ToDoListStore.AddToDoListItem(model));
         }
 
         [HttpPut, Route("api/[controller]/{id}")]
-        public ToDoListModel Put([FromBody] ToDoListModel model, int id)
+        public ActionResult<ToDoListModel> Put([FromBody] ToDoListModel model, int id)
         {
-            return ToDoListStore.UpdateToDoListItem(model, id);
+            var toDoList = ToDoListStore.UpdateToDoListItem(model, id);
+
+            if (toDoList != null)
+            {
+                return Ok(toDoList);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [HttpDelete, Route("api/[controller]")]
-        public void Delete()
+        public ActionResult Delete()
         {
             ToDoListStore.DeleteToDoList();
+            return NoContent();
         }
 
         [HttpDelete, Route("api/[controller]/{id}")]
-        public void DeleteItem(int id)
+        public ActionResult DeleteItem(int id)
         {
-            ToDoListStore.DeleteToDoListItem(id);
+            if (ToDoListStore.DeleteToDoListItem(id))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }
